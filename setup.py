@@ -11,7 +11,7 @@ setup(
     version='0.1',
     license='ISC',
     description='A Django application for integration with PayOnline System',
-    long_description=read('README.rst')
+    long_description=read('README.rst'),
     author='Mike Yumatov',
     author_email='mike@yumatov.org',
     packages=find_packages(),
