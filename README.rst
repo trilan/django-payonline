@@ -1,7 +1,7 @@
 Django PayOnline
 ================
 
-Django PayOnline is an application for integration with PayOnline System.
+Django PayOnline is an application for integration with `PayOnline System`_.
 
 Installation
 ------------
@@ -40,3 +40,5 @@ Contributing
 ------------
 
 Feel free to fork, send pull requests or report bugs and issues on github.
+
+.. _Payonline System: http://www.payonlinesystem.com/
