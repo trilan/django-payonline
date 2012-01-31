@@ -44,6 +44,7 @@ class PayView(View):
         kwargs.update({'order_id': self.get_order_id(),
                        'amount': self.get_amount(),
                        'merchant_id': self.get_merchant_id(),
+                       'currency': self.get_currency(),
                        'security_key': self.get_security_key()})
         return kwargs
 
