@@ -1,8 +1,6 @@
-import pytz
 from hashlib import md5
 
 from django import forms
-from django.core.exceptions import ObjectDoesNotExist
 from django.utils.datastructures import SortedDict
 
 from .models import PaymentData
@@ -17,27 +15,34 @@ class PaymentDataForm(forms.ModelForm):
         model = PaymentData
 
     def __init__(self, *args, **kwargs):
-        self.shop = kwargs.pop('shop')
-        self.private_security_key = kwargs.pop('private_security_key')
+        self.private_security_key = kwargs.pop('private_security_key', '')
         kwargs['data'] = DataProxy(kwargs['data'])
         super(PaymentDataForm, self).__init__(*args, **kwargs)
 
     def get_security_key_params(self):
         params = SortedDict()
-        params['DateTime'] = self.data.get('DateTime', '')
-        params['TransactionID'] = self.data.get('TransactionID', '')
-        params['OrderId'] = self.data.get('OrderId', '')
-        params['Amount'] = self.data.get('Amount', '')
-        params['Currency'] = self.data.get('Currency', '')
+        date_time = self.cleaned_data.get('datetime', '')
+        if date_time:
+            date_time = date_time.strftime('%Y-%m-%d %H:%M:%S')
+        transaction_id = self.cleaned_data.get('transaction_id', '')
+        order_id = self.cleaned_data.get('order_id', '')
+        amount = self.cleaned_data.get('amount', '')
+        params['DateTime'] = date_time
+        params['TransactionID'] = str(transaction_id)
+        params['OrderId'] = str(order_id)
+        params['Amount'] = '%.2f' % amount if amount else ''
+        params['Currency'] = self.cleaned_data.get('currency', '')
         params['PrivateSecurityKey'] = self.private_security_key
         return params
 
     def get_security_key(self):
         params = self.get_security_key_params()
-        key = md5('&'.join('='.join(i) for i in params.items())).hexdigest()
+        query_string = '&'.join('='.join(i) for i in params.items())
+        key = md5(query_string).hexdigest()
         return key
 
     def clean(self):
-        if self.data.get('SecurityKey') != self.get_security_key():
+        super(PaymentDataForm, self).clean()
+        if self.cleaned_data.get('SecurityKey') != self.get_security_key():
             raise forms.ValidationError('Wrong security key')
         return self.cleaned_data

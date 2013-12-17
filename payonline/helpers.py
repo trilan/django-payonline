@@ -7,6 +7,7 @@ class DataProxy(object):
         'amount': 'Amount',
         'currency': 'Currency',
         'provider': 'Provider',
+        'order_id': 'OrderId',
         'card_holder': 'CardHolder',
         'cart_number': 'CardNumber',
         'country': 'Country',

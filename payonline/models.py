@@ -18,10 +18,11 @@ PROVIDERS = (
 class PaymentData(models.Model):
 
     datetime = UTCDateTimeField()
-    transaction_id = models.PositiveIntegerField()
+    transaction_id = models.PositiveIntegerField(unique=True)
     amount = models.DecimalField(max_digits=12, decimal_places=2)
     currency = models.CharField(max_length=3, choices=CURRENCIES)
     provider = models.CharField(max_length=10, choices=PROVIDERS)
+    order_id = models.CharField(max_length=50, blank=True)
 
     card_holder = models.CharField(max_length=255, blank=True)
     card_number = models.CharField(max_length=16, blank=True)
@@ -35,6 +36,6 @@ class PaymentData(models.Model):
     wm_id = models.CharField(max_length=255, blank=True)
     wm_purse = models.CharField(max_length=255, blank=True)
 
-    ip_address = models.CharField(max_length=255)
-    ip_country = models.CharField(max_length=2)
+    ip_address = models.CharField(max_length=255, blank=True)
+    ip_country = models.CharField(max_length=2, blank=True)
     bin_country = models.CharField(max_length=2, blank=True)

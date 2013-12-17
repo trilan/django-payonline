@@ -10,6 +10,6 @@ class UTCDateTimeField(models.DateTimeField):
         return super(UTCDateTimeField, self).formfield(**kwargs)
 
     def south_field_triple(self):
-        from south.modelinspector import introspector
+        from south.modelsinspector import introspector
         args, kwargs = introspector(self)
         return ('django.db.models.fields.DateTimeField', args, kwargs)
